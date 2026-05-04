@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nofar Balloons 🎈</title>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+:root {
+  --bg: #0F0F1A;
+  --bg2: #181828;
+  --card: #1E1E32;
+  --card2: #252540;
+  --border: rgba(255,255,255,0.08);
+  --text: #F0F0FF;
+  --muted: rgba(240,240,255,0.45);
+  --pink: #FF6BB5;
+  --gold: #FFD166;
+  --mint: #06D6A0;
+  --sky: #4CC9F0;
+  --purple: #C77DFF;
+  --red: #FF6B6B;
+  --grad: linear-gradient(135deg, #FF6BB5, #C77DFF, #4CC9F0);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Rubik', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  direction: rtl;
+  overflow-x: hidden;
+}
+
+/* ── BACKGROUND BALLOONS ── */
+.bg-wrap {
+position: fixed; inset: 0;
+pointer-events: none; z-index: 0;
+overflow: hidden;
+}
+.bg-b {
+position: absolute;
+border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+animation: rise linear infinite;
+opacity: 0;
+}
+@keyframes rise {
+0%   { transform: translateY(110vh) rotate(-8deg); opacity: 0; }
+10%  { opacity: 0.06; }
+90%  { opacity: 0.06; }
+100% { transform: translateY(-20vh) rotate(12deg); opacity: 0; }
+}
+
+/* ── HEADER ── */
+header {
+position: relative; z-index: 1;
+text-align: center;
+padding: 3rem 1.5rem 2.5rem;
+background: linear-gradient(180deg, rgba(199,125,255,0.08) 0%, transparent 100%);
+border-bottom: 1px solid var(–border);
+}
+.logo-wrap { display: inline-flex; align-items: center; gap: 0.6rem; margin-bottom: 0.3rem; }
+.logo-icon { font-size: 2.4rem; display:inline-block; animation: bob 4s ease-in-out infinite; }
+@keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.logo-text {
+font-size: 2.4rem; font-weight: 900;
+background: var(–grad);
+-webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.logo-sub { color: var(–muted); font-size: 0.9rem; font-weight: 300; letter-spacing: 1px; margin-top: 0.2rem; }
+.header-badges {
+display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; margin-top: 1.2rem;
+}
+.hbadge {
+background: rgba(255,255,255,0.06);
+border: 1px solid var(–border);
+padding: 0.3rem 0.9rem;
+border-radius: 50px;
+font-size: 0.8rem;
+color: var(–muted);
+}
+
+/* ── NAV ── */
+.nav-wrap {
+position: sticky; top: 0; z-index: 50;
+background: rgba(15,15,26,0.92);
+backdrop-filter: blur(16px);
+border-bottom: 1px solid var(–border);
+padding: 0.6rem 1rem;
+}
+.nav {
+display: flex;
+max-width: 700px; margin: 0 auto;
+background: var(–card);
+border-radius: 14px;
+padding: 4px; gap: 4px;
+}
+.nav-btn {
+flex: 1;
+background: none; border: none;
+padding: 0.65rem 0.5rem;
+border-radius: 10px;
+color: var(–muted);
+font-family: ‘Rubik’, sans-serif;
+font-size: 0.88rem; font-weight: 500;
+cursor: pointer;
+transition: all 0.2s;
+display: flex; align-items: center; justify-content: center; gap: 0.35rem;
+position: relative;
+}
+.nav-btn.active { background: var(–card2); color: var(–text); }
+.nav-btn:hover:not(.active) { color: var(–text); }
+.nav-badge {
+position: absolute; top: 4px; left: 6px;
+background: var(–pink);
+color: white;
+width: 18px; height: 18px;
+border-radius: 50%;
+font-size: 0.7rem; font-weight: 700;
+display: flex; align-items: center; justify-content: center;
+animation: pop 0.3s ease;
+}
+@keyframes pop { 0%{transform:scale(0)} 70%{transform:scale(1.2)} 100%{transform:scale(1)} }
+
+/* ── MAIN ── */
+.app { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 2rem 1rem 8rem; }
+.section { display: none; animation: fadeIn 0.3s ease; }
+.section.active { display: block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── SECTION HEADER ── */
+.sec-head { margin-bottom: 1.5rem; }
+.sec-title { font-size: 1.5rem; font-weight: 700; }
+.sec-title span { background: var(–grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.sec-sub { color: var(–muted); font-size: 0.88rem; margin-top: 0.2rem; }
+
+/* ── FILTERS ── */
+.filters { display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom: 1.5rem; }
+.f-btn {
+background: var(–card);
+border: 1px solid var(–border);
+color: var(–muted);
+padding: 0.4rem 1rem;
+border-radius: 50px;
+font-family: ‘Rubik’, sans-serif;
+font-size: 0.82rem; font-weight: 500;
+cursor: pointer;
+transition: all 0.2s;
+}
+.f-btn.active, .f-btn:hover { border-color: var(–pink); color: var(–pink); background: rgba(255,107,181,0.08); }
+
+/* ── PRODUCT GRID ── */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.2rem; }
+
+.pcard {
+background: var(–card);
+border: 1px solid var(–border);
+border-radius: 20px;
+overflow: hidden;
+transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+cursor: default;
+}
+.pcard:hover { transform: translateY(-5px); box-shadow: 0 16px 40px rgba(0,0,0,0.4); border-color: rgba(255,255,255,0.15); }
+
+.pcard-img {
+height: 160px;
+display: flex; align-items: center; justify-content: center;
+font-size: 5rem;
+position: relative;
+}
+.pcard-img .stock-pill {
+position: absolute; bottom: 10px; right: 10px;
+padding: 0.22rem 0.7rem;
+border-radius: 50px;
+font-size: 0.72rem; font-weight: 600;
+}
+.pill-in  { background: rgba(6,214,160,0.15); color: var(–mint); border: 1px solid rgba(6,214,160,0.3); }
+.pill-low { background: rgba(255,209,102,0.15); color: var(–gold); border: 1px solid rgba(255,209,102,0.3); }
+.pill-out { background: rgba(255,107,107,0.15); color: var(–red);  border: 1px solid rgba(255,107,107,0.3); }
+
+.pcard-body { padding: 1.1rem 1.1rem 1.2rem; }
+.pcard-name { font-weight: 700; font-size: 1.05rem; margin-bottom: 0.3rem; }
+.pcard-desc { color: var(–muted); font-size: 0.82rem; line-height: 1.55; margin-bottom: 0.9rem; }
+
+.stock-bar-wrap { margin-bottom: 0.7rem; }
+.stock-label { display:flex; justify-content:space-between; font-size:0.75rem; color:var(–muted); margin-bottom:0.3rem; }
+.stock-track { height: 5px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow:hidden; }
+.stock-fill { height:100%; border-radius:3px; transition: width 0.6s ease; }
+
+.pcard-foot { display:flex; align-items:center; justify-content:space-between; }
+.price { font-size: 1.25rem; font-weight: 800; }
+.price sub { font-size: 0.75rem; font-weight: 400; color: var(–muted); margin-right: 2px; }
+
+.add-btn {
+background: var(–grad);
+border: none;
+width: 40px; height: 40px;
+border-radius: 50%;
+color: white;
+font-size: 1.5rem;
+cursor: pointer;
+transition: transform 0.2s, opacity 0.2s;
+display: flex; align-items:center; justify-content:center;
+flex-shrink: 0;
+}
+.add-btn:hover:not(:disabled) { transform: scale(1.15) rotate(90deg); }
+.add-btn:disabled { background: rgba(255,255,255,0.1); cursor:not-allowed; }
+
+/* ── CART ── */
+.cart-empty {
+text-align: center; padding: 4rem 1rem;
+color: var(–muted);
+}
+.cart-empty .ce-icon { font-size: 4rem; margin-bottom: 1rem; opacity: 0.4; }
+.cart-empty p { font-size: 1rem; }
+
+.cart-list { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem; }
+.cart-item {
+background: var(–card);
+border: 1px solid var(–border);
+border-radius: 16px;
+padding: 1rem 1.1rem;
+display: flex;
+align-items: center;
+gap: 1rem;
+animation: fadeIn 0.25s ease;
+}
+.ci-icon { font-size: 2.2rem; flex-shrink: 0; }
+.ci-info { flex: 1; }
+.ci-name { font-weight: 600; font-size: 0.97rem; }
+.ci-price { color: var(–muted); font-size: 0.82rem; margin-top: 0.1rem; }
+.ci-qty {
+display: flex; align-items: center; gap: 0.6rem;
+background: var(–card2);
+border-radius: 50px;
+padding: 0.3rem 0.5rem;
+}
+.qty-btn {
+background: none; border: none;
+color: var(–text); cursor: pointer;
+width: 26px; height: 26px;
+border-radius: 50%;
+font-size: 1rem;
+display: flex; align-items:center; justify-content:center;
+transition: background 0.15s;
+}
+.qty-btn:hover { background: rgba(255,255,255,0.1); }
+.qty-num { font-weight: 700; font-size: 0.95rem; min-width: 22px; text-align:center; }
+.ci-total { font-weight: 700; font-size: 1rem; color: var(–pink); min-width: 60px; text-align: left; }
+
+.cart-summary-box {
+background: var(–card);
+border: 1px solid var(–border);
+border-radius: 16px;
+padding: 1.2rem;
+margin-bottom: 1.2rem;
+}
+.cs-row { display:flex; justify-content:space-between; align-items:center; padding: 0.4rem 0; }
+.cs-row:not(:last-child) { border-bottom: 1px solid var(–border); }
+.cs-label { color: var(–muted); font-size: 0.9rem; }
+.cs-val { font-weight: 700; font-size: 0.95rem; }
+.cs-total .cs-label { color: var(–text); font-weight: 600; font-size: 1rem; }
+.cs-total .cs-val { font-size: 1.2rem; color: var(–gold); }
+
+.order-btn {
+width: 100%;
+background: var(–grad);
+border: none;
+padding: 1rem;
+border-radius: 14px;
+color: white;
+font-family: ‘Rubik’, sans-serif;
+font-size: 1.05rem;
+font-weight: 700;
+cursor: pointer;
+transition: opacity 0.2s, transform 0.2s;
+letter-spacing: 0.3px;
+}
+.order-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+/* ── ORDER WIZARD ── */
+.wizard-steps {
+display: flex;
+justify-content: center;
+gap: 0;
+margin-bottom: 2rem;
+position: relative;
+}
+.wizard-steps::before {
+content: ‘’;
+position: absolute;
+top: 18px; right: 12%; left: 12%;
+height: 2px;
+background: var(–border);
+z-index: 0;
+}
+.ws {
+display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+flex: 1; position: relative; z-index: 1;
+}
+.ws-dot {
+width: 36px; height: 36px;
+border-radius: 50%;
+background: var(–card2);
+border: 2px solid var(–border);
+display: flex; align-items:center; justify-content:center;
+font-size: 0.85rem; font-weight: 700;
+color: var(–muted);
+transition: all 0.3s;
+}
+.ws.done .ws-dot { background: var(–mint); border-color: var(–mint); color: white; }
+.ws.active .ws-dot { background: var(–grad); border-color: transparent; color: white; box-shadow: 0 0 0 4px rgba(199,125,255,0.2); }
+.ws-label { font-size: 0.72rem; color: var(–muted); font-weight: 500; }
+.ws.active .ws-label { color: var(–text); }
+
+.wizard-page { display: none; animation: fadeIn 0.3s ease; }
+.wizard-page.active { display: block; }
+
+/* ── FORM ── */
+.form-card {
+background: var(–card);
+border: 1px solid var(–border);
+border-radius: 20px;
+padding: 1.5rem;
+margin-bottom: 1rem;
+}
+.form-card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 1.2rem; display:flex; align-items:center; gap:0.5rem; }
+
+.field { margin-bottom: 1.1rem; }
+.field label { display:block; font-size:0.82rem; color:var(–muted); margin-bottom:0.4rem; font-weight:500; }
+.field input, .field select, .field textarea {
+width: 100%;
+background: var(–card2);
+border: 1px solid var(–border);
+border-radius: 10px;
+padding: 0.75rem 1rem;
+color: var(–text);
+font-family: ‘Rubik’, sans-serif;
+font-size: 0.93rem;
+transition: border-color 0.2s;
+outline: none;
+direction: rtl;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+border-color: var(–purple);
+}
+.field textarea { resize: vertical; min-height: 80px; }
+.field select option { background: var(–card2); }
+
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+
+.radio-group { display: flex; flex-direction: column; gap: 0.6rem; }
+.radio-opt {
+display: flex; align-items: center; gap: 0.7rem;
+background: var(–card2);
+border: 1px solid var(–border);
+border-radius: 12px;
+padding: 0.8rem 1rem;
+cursor: pointer;
+transition: border-color 0.2s;
+}
+.radio-opt input { width:auto; accent-color: var(–purple); }
+.radio-opt:has(input:checked) { border-color: var(–purple); }
+.radio-opt .ro-icon { font-size: 1.2rem; }
+.ro-info { flex:1; }
+.ro-label { font-size: 0.9rem; font-weight: 600; }
+.ro-sub { font-size: 0.78rem; color: var(–muted); }
+
+/* ── ORDER REVIEW ── */
+.review-item {
+display: flex; justify-content: space-between; align-items: center;
+padding: 0.6rem 0;
+border-bottom: 1px solid var(–border);
+font-size: 0.9rem;
+}
+.review-item:last-child { border: none; }
+.ri-name { color: var(–muted); }
+.ri-val { font-weight: 600; }
+
+/* ── SEND BUTTONS ── */
+.send-btns { display:flex; flex-direction:column; gap:0.8rem; margin-top: 1rem; }
+.btn-wa {
+display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+background: #25D366;
+border: none; border-radius: 14px;
+padding: 1rem; color: white;
+font-family: ‘Rubik’, sans-serif;
+font-size: 1rem; font-weight: 700;
+cursor: pointer; text-decoration: none;
+transition: opacity 0.2s, transform 0.2s;
+}
+.btn-wa:hover { opacity: 0.9; transform: translateY(-2px); }
+.btn-mail {
+display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+background: var(–card);
+border: 1px solid var(–border);
+border-radius: 14px;
+padding: 0.9rem; color: var(–text);
+font-family: ‘Rubik’, sans-serif;
+font-size: 0.95rem; font-weight: 600;
+cursor: pointer; text-decoration: none;
+transition: border-color 0.2s, transform 0.2s;
+}
+.btn-mail:hover { border-color: rgba(255,255,255,0.3); transform: translateY(-2px); }
+
+.btn-back {
+background: none; border: 1px solid var(–border);
+border-radius: 10px; padding: 0.65rem 1.2rem;
+color: var(–muted); font-family: ‘Rubik’, sans-serif;
+font-size: 0.88rem; cursor: pointer;
+transition: border-color 0.2s, color 0.2s;
+}
+.btn-back:hover { border-color: rgba(255,255,255,0.25); color: var(–text); }
+.btn-next {
+background: var(–grad);
+border: none; border-radius: 10px;
+padding: 0.65rem 1.5rem;
+color: white; font-family: ‘Rubik’, sans-serif;
+font-size: 0.9rem; font-weight: 700;
+cursor: pointer;
+transition: opacity 0.2s, transform 0.2s;
+}
+.btn-next:hover { opacity: 0.9; transform: translateY(-1px); }
+.wiz-nav { display: flex; justify-content: space-between; margin-top: 1rem; }
+
+/* ── SUCCESS ── */
+.success-box {
+text-align: center; padding: 3rem 1.5rem;
+background: var(–card);
+border: 1px solid var(–border);
+border-radius: 24px;
+}
+.success-icon { font-size: 4rem; margin-bottom: 1rem; animation: bounce 0.6s ease; }
+@keyframes bounce { 0%{transform:scale(0)} 60%{transform:scale(1.2)} 100%{transform:scale(1)} }
+.success-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+.success-sub { color: var(–muted); font-size: 0.9rem; line-height: 1.6; }
+
+/* ── TOAST ── */
+.toast {
+position: fixed; bottom: 1.5rem; right: 50%; transform: translateX(50%);
+background: var(–mint); color: #0a2a1e;
+padding: 0.7rem 1.4rem; border-radius: 50px;
+font-weight: 600; font-size: 0.88rem;
+z-index: 999;
+animation: toastIn 0.3s ease, toastOut 0.3s ease 1.7s forwards;
+white-space: nowrap;
+box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
+@keyframes toastIn { from{opacity:0;transform:translateX(50%) translateY(20px)} to{opacity:1;transform:translateX(50%) translateY(0)} }
+@keyframes toastOut { to{opacity:0;transform:translateX(50%) translateY(20px)} }
+
+/* ── FOOTER ── */
+footer {
+position: relative; z-index: 1;
+text-align: center; padding: 2rem;
+color: var(–muted); font-size: 0.8rem;
+border-top: 1px solid var(–border);
+}
+
+@media (max-width: 500px) {
+.logo-text { font-size: 1.8rem; }
+.grid { grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+.pcard-img { height: 120px; font-size: 3.5rem; }
+.field-row { grid-template-columns: 1fr; }
+.nav-btn span.nav-label { display: none; }
+}
+</style>
+
+</head>
+<body>
+
+<!-- BG Balloons -->
+
+<div class="bg-wrap" id="bgWrap"></div>
+
+<!-- Header -->
+
+<header>
+  <div class="logo-wrap">
+    <span class="logo-icon">🎈</span>
+    <span class="logo-text">Nofar Balloons</span>
+  </div>
+  <p class="logo-sub">עמדות בלונים לאירועים מיוחדים</p>
+  <div class="header-badges">
+    <span class="hbadge">🎉 מסיבות יומולדת</span>
+    <span class="hbadge">💍 חתונות ואירוסין</span>
+    <span class="hbadge">🎓 בר/בת מצווה</span>
+    <span class="hbadge">🎊 כל אירוע</span>
+  </div>
+</header>
+
+<!-- Nav -->
+
+<div class="nav-wrap">
+  <div class="nav">
+    <button class="nav-btn active" onclick="showSection('catalog')" id="tab-catalog">
+      <span>🛍</span><span class="nav-label">קטלוג</span>
+    </button>
+    <button class="nav-btn" onclick="showSection('cart')" id="tab-cart">
+      <span>🛒</span><span class="nav-label">עגלה</span>
+      <span class="nav-badge" id="cart-badge" style="display:none">0</span>
+    </button>
+    <button class="nav-btn" onclick="showSection('order')" id="tab-order">
+      <span>📋</span><span class="nav-label">הזמנה</span>
+    </button>
+  </div>
+</div>
+
+<!-- App -->
+
+<div class="app">
+
+  <!-- ═══ CATALOG ═══ -->
+
+  <div class="section active" id="section-catalog">
+    <div class="sec-head">
+      <h2 class="sec-title">הקטלוג שלנו <span>🎈</span></h2>
+      <p class="sec-sub">בחרו את העמדה המושלמת לאירוע שלכם</p>
+    </div>
+
+```
+<div class="filters">
+  <button class="f-btn active" onclick="filterProducts('all', this)">הכל</button>
+  <button class="f-btn" onclick="filterProducts('arch', this)">קשתות</button>
+  <button class="f-btn" onclick="filterProducts('tower', this)">עמדות ועמודים</button>
+  <button class="f-btn" onclick="filterProducts('bouquet', this)">זרים</button>
+  <button class="f-btn" onclick="filterProducts('special', this)">מיוחד</button>
+</div>
+
+<div class="grid" id="products-grid"></div>
+```
+
+  </div>
+
+  <!-- ═══ CART ═══ -->
+
+  <div class="section" id="section-cart">
+    <div class="sec-head">
+      <h2 class="sec-title">העגלה שלי <span>🛒</span></h2>
+      <p class="sec-sub">בדקו את הבחירות שלכם לפני ההזמנה</p>
+    </div>
+    <div id="cart-content"></div>
+  </div>
+
+  <!-- ═══ ORDER WIZARD ═══ -->
+
+  <div class="section" id="section-order">
+    <div class="sec-head">
+      <h2 class="sec-title">פרטי הזמנה <span>📋</span></h2>
+      <p class="sec-sub">מלאו את הפרטים ואנחנו נחזור אליכם בהקדם</p>
+    </div>
+
+```
+<!-- Steps -->
+<div class="wizard-steps" id="wizard-steps">
+  <div class="ws active" id="ws-0"><div class="ws-dot">1</div><span class="ws-label">תאריך</span></div>
+  <div class="ws" id="ws-1"><div class="ws-dot">2</div><span class="ws-label">פרטים</span></div>
+  <div class="ws" id="ws-2"><div class="ws-dot">3</div><span class="ws-label">אישור</span></div>
+</div>
+
+<!-- Step 1: Date & Event -->
+<div class="wizard-page active" id="wp-0">
+  <div class="form-card">
+    <h3>📅 מתי ואיפה?</h3>
+    <div class="field-row">
+      <div class="field">
+        <label>תאריך האירוע *</label>
+        <input type="date" id="f-date">
+      </div>
+      <div class="field">
+        <label>שעת ההתחלה *</label>
+        <input type="time" id="f-time" value="18:00">
+      </div>
+    </div>
+    <div class="field">
+      <label>כתובת האירוע *</label>
+      <input type="text" id="f-address" placeholder="עיר, רחוב ומספר">
+    </div>
+    <div class="field">
+      <label>סוג האירוע</label>
+      <select id="f-event-type">
+        <option value="">בחרו סוג אירוע</option>
+        <option>יום הולדת</option>
+        <option>חתונה</option>
+        <option>אירוסין</option>
+        <option>בר/בת מצווה</option>
+        <option>ברית / סיום</option>
+        <option>אירוע עסקי</option>
+        <option>אחר</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-card">
+    <h3>🎨 העדפות צבע</h3>
+    <div class="field">
+      <label>צבעים מועדפים לבלונים</label>
+      <input type="text" id="f-colors" placeholder="לדוגמה: ורוד, לבן וזהב">
+    </div>
+    <div class="field">
+      <label>הערות לגבי עיצוב</label>
+      <textarea id="f-design-notes" placeholder="תמה מיוחדת, תוספות, בקשות מיוחדות..."></textarea>
+    </div>
+  </div>
+  <div class="wiz-nav">
+    <div></div>
+    <button class="btn-next" onclick="goStep(1)">הבא ←</button>
+  </div>
+</div>
+
+<!-- Step 2: Contact -->
+<div class="wizard-page" id="wp-1">
+  <div class="form-card">
+    <h3>👤 פרטים אישיים</h3>
+    <div class="field-row">
+      <div class="field">
+        <label>שם מלא *</label>
+        <input type="text" id="f-name" placeholder="שם ושם משפחה">
+      </div>
+      <div class="field">
+        <label>טלפון *</label>
+        <input type="tel" id="f-phone" placeholder="05X-XXXXXXX">
+      </div>
+    </div>
+    <div class="field">
+      <label>כתובת מייל</label>
+      <input type="email" id="f-email" placeholder="לקבלת אישור הזמנה">
+    </div>
+  </div>
+  <div class="form-card">
+    <h3>🚚 איסוף / הגעה</h3>
+    <div class="radio-group">
+      <label class="radio-opt">
+        <input type="radio" name="delivery" value="delivery" checked>
+        <span class="ro-icon">🚐</span>
+        <div class="ro-info">
+          <div class="ro-label">התקנה באירוע</div>
+          <div class="ro-sub">נגיע ונתקין הכל באתר האירוע</div>
+        </div>
+      </label>
+      <label class="radio-opt">
+        <input type="radio" name="delivery" value="pickup">
+        <span class="ro-icon">🏠</span>
+        <div class="ro-info">
+          <div class="ro-label">איסוף עצמי</div>
+          <div class="ro-sub">תאספו מאיתנו ותתקינו לבד</div>
+        </div>
+      </label>
+    </div>
+  </div>
+  <div class="form-card">
+    <h3>💬 הערות נוספות</h3>
+    <div class="field">
+      <textarea id="f-notes" placeholder="כל פרט נוסף שחשוב לדעת..."></textarea>
+    </div>
+  </div>
+  <div class="wiz-nav">
+    <button class="btn-back" onclick="goStep(0)">→ חזור</button>
+    <button class="btn-next" onclick="goStep(2)">לסיכום ←</button>
+  </div>
+</div>
+
+<!-- Step 3: Review & Send -->
+<div class="wizard-page" id="wp-2">
+  <div class="form-card">
+    <h3>🧾 סיכום ההזמנה</h3>
+    <div id="review-content"></div>
+  </div>
+
+  <div class="send-btns" id="send-btns-area">
+    <button id="btn-confirm" onclick="sendEmail()" class="order-btn" style="font-size:1.1rem;padding:1.1rem;letter-spacing:0.5px">
+      <span id="email-btn-icon">🎈</span>
+      <span id="email-btn-text"> שריין הזמנה</span>
+    </button>
+  </div>
+
+  <!-- Success box (hidden until sent) -->
+  <div id="email-success" style="display:none;margin-top:1.2rem" class="form-card">
+    <div style="text-align:center;padding:1.2rem 0">
+      <div style="font-size:3rem;margin-bottom:0.6rem;animation:bounce 0.6s ease">🎉</div>
+      <div style="font-weight:700;font-size:1.2rem;margin-bottom:0.4rem">ההזמנה שוריינה!</div>
+      <div style="color:var(--muted);font-size:0.87rem;line-height:1.6">קיבלנו את הפרטים ונחזור אליך בהקדם לאישור סופי 💜</div>
+    </div>
+  </div>
+
+  <div class="wiz-nav" style="margin-top:1rem">
+    <button class="btn-back" onclick="goStep(1)">→ חזור</button>
+    <div></div>
+  </div>
+</div>
+```
+
+  </div><!-- /order -->
+
+</div><!-- /app -->
+
+<footer>
+  <p>🎈 Nofar Balloons · עמדות ואירועים · 054-9254440</p>
+</footer>
+
+<script>
+// ═══════════════════════════════
+// DATA
+// ═══════════════════════════════
+const PRODUCTS = [
+  { id:1, name:'קשת בלונים קלאסית', cat:'arch', icon:'🌈', desc:'קשת צבעונית ורחבה לכניסה לאולם או לגינה. מרשימה ומושכת עין.', price:350, stock:8, max:10, colors:['#FF6BB5','#C77DFF','#4CC9F0'] },
+  { id:2, name:'קשת ענק פרימיום', cat:'arch', icon:'🎪', desc:'קשת גדולה במיוחד עם בלונים בגדלים שונים ואפשרות לבלוני כרום.', price:550, stock:3, max:5, colors:['#FFD166','#FF6B6B','#C77DFF'] },
+  { id:3, name:'עמוד בלונים', cat:'tower', icon:'🗼', desc:'עמוד גבוה ומרשים עם בלונים, מושלם לכניסה לאירוע או כרקע לצילומים.', price:200, stock:12, max:15, colors:['#4CC9F0','#06D6A0','#FFD166'] },
+  { id:4, name:'עמדת צילום', cat:'tower', icon:'📸', desc:'עמדה מעוצבת עם בלונים כרקע לתמונות. כולל מסגרת ועיצוב מותאם.', price:650, stock:2, max:4, colors:['#C77DFF','#FF6BB5','#FFD166'] },
+  { id:5, name:'זר בלונים שולחני', cat:'bouquet', icon:'💐', desc:'זר בלונים קטן ואלגנטי לשולחנות האורחים. מגיע בזוגות.', price:90, stock:20, max:30, colors:['#FF6BB5','#FFD166','#06D6A0'] },
+  { id:6, name:'זר בלונים עומד', cat:'bouquet', icon:'🎀', desc:'זר בלונים גבוה ועומד לעיטור חללים. צבעים לבחירה.', price:150, stock:15, max:20, colors:['#4CC9F0','#C77DFF','#FF6BB5'] },
+  { id:7, name:'בלון ענק מיוחד', cat:'special', icon:'⭐', desc:'בלון ענק עם הדפסה מותאמת אישית. מושלם לתמונה מיוחדת.', price:180, stock:0, max:5, colors:['#FFD166','#FF6B6B'] },
+  { id:8, name:'חופה בלונים', cat:'special', icon:'💒', desc:'חופה מעוצבת עם בלונים לחתונות ואירוסין. עיצוב אלגנטי ומרגש.', price:900, stock:4, max:4, colors:['#FFFFFF','#FFD166','#C77DFF'] },
+];
+
+let cart = {}; // {id: qty}
+
+// ═══════════════════════════════
+// BACKGROUND BALLOONS
+// ═══════════════════════════════
+function initBg() {
+  const wrap = document.getElementById('bgWrap');
+  const colors = ['#FF6BB5','#FFD166','#4CC9F0','#C77DFF','#06D6A0','#FF6B6B'];
+  for (let i = 0; i < 14; i++) {
+    const b = document.createElement('div');
+    b.className = 'bg-b';
+    const size = 40 + Math.random() * 80;
+    b.style.cssText = `
+      width:${size}px; height:${size*1.2}px;
+      background:${colors[i%colors.length]};
+      right:${Math.random()*100}%;
+      animation-duration:${12+Math.random()*10}s;
+      animation-delay:${Math.random()*12}s;
+    `;
+    wrap.appendChild(b);
+  }
+}
+
+// ═══════════════════════════════
+// RENDER CATALOG
+// ═══════════════════════════════
+function renderCatalog(filter = 'all') {
+  const grid = document.getElementById('products-grid');
+  const filtered = filter === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.cat === filter);
+
+  grid.innerHTML = filtered.map(p => {
+    const pct = Math.round((p.stock / p.max) * 100);
+    const statusClass = p.stock === 0 ? 'pill-out' : p.stock <= 3 ? 'pill-low' : 'pill-in';
+    const statusText  = p.stock === 0 ? '❌ אזל' : p.stock <= 3 ? `⚠️ נשארו ${p.stock}` : `✅ במלאי`;
+    const barColor    = p.stock === 0 ? '#FF6B6B' : p.stock <= 3 ? '#FFD166' : '#06D6A0';
+    const inCart = cart[p.id] || 0;
+    const canAdd = p.stock > 0 && inCart < p.stock;
+    const bg = `linear-gradient(135deg, ${p.colors[0]}22, ${p.colors[p.colors.length-1]}33)`;
+
+    return `
+    <div class="pcard" data-id="${p.id}">
+      <div class="pcard-img" style="background:${bg}">
+        ${p.icon}
+        <span class="stock-pill ${statusClass}">${statusText}</span>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-name">${p.name}</div>
+        <div class="pcard-desc">${p.desc}</div>
+        <div class="stock-bar-wrap">
+          <div class="stock-label">
+            <span>מלאי זמין</span>
+            <span>${p.stock} / ${p.max}</span>
+          </div>
+          <div class="stock-track">
+            <div class="stock-fill" style="width:${pct}%;background:${barColor}"></div>
+          </div>
+        </div>
+        <div class="pcard-foot">
+          <div class="price"><sub>₪</sub>${p.price.toLocaleString()}<span style="font-size:0.75rem;color:var(--muted);font-weight:400"> / יחידה</span></div>
+          <button class="add-btn" onclick="addToCart(${p.id})" ${!canAdd ? 'disabled' : ''} title="${p.stock === 0 ? 'אזל מהמלאי' : 'הוסף לעגלה'}">
+            ${inCart > 0 ? `<span style="font-size:0.75rem;font-weight:700">${inCart}</span>` : '+'}
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterProducts(cat, btn) {
+  document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCatalog(cat);
+}
+
+// ═══════════════════════════════
+// CART LOGIC
+// ═══════════════════════════════
+function addToCart(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p || p.stock === 0) return;
+  cart[id] = Math.min((cart[id] || 0) + 1, p.stock);
+  updateCartBadge();
+  renderCatalog(getCurrentFilter());
+  showToast(`${p.icon} ${p.name} נוסף לעגלה`);
+}
+
+function updateCartBadge() {
+  const total = Object.values(cart).reduce((a,b)=>a+b,0);
+  const badge = document.getElementById('cart-badge');
+  badge.textContent = total;
+  badge.style.display = total > 0 ? 'flex' : 'none';
+}
+
+function getCurrentFilter() {
+  const active = document.querySelector('.f-btn.active');
+  if (!active) return 'all';
+  const map = {'הכל':'all','קשתות':'arch','עמדות ועמודים':'tower','זרים':'bouquet','מיוחד':'special'};
+  return map[active.textContent] || 'all';
+}
+
+function renderCart() {
+  const el = document.getElementById('cart-content');
+  const items = Object.entries(cart).filter(([id,qty])=>qty>0);
+
+  if (items.length === 0) {
+    el.innerHTML = `<div class="cart-empty"><div class="ce-icon">🛒</div><p>העגלה ריקה — חזרו לקטלוג ובחרו עמדות</p></div>`;
+    return;
+  }
+
+  const total = items.reduce((sum,[id,qty]) => {
+    const p = PRODUCTS.find(x=>x.id==id);
+    return sum + p.price * qty;
+  }, 0);
+
+  el.innerHTML = `
+    <div class="cart-list">
+      ${items.map(([id,qty]) => {
+        const p = PRODUCTS.find(x=>x.id==id);
+        return `
+        <div class="cart-item">
+          <div class="ci-icon">${p.icon}</div>
+          <div class="ci-info">
+            <div class="ci-name">${p.name}</div>
+            <div class="ci-price">₪${p.price} ליחידה</div>
+          </div>
+          <div class="ci-qty">
+            <button class="qty-btn" onclick="changeQty(${id},-1)">−</button>
+            <span class="qty-num">${qty}</span>
+            <button class="qty-btn" onclick="changeQty(${id},1)" ${qty>=p.stock?'disabled style="opacity:0.3"':''}>+</button>
+          </div>
+          <div class="ci-total">₪${(p.price*qty).toLocaleString()}</div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="cart-summary-box">
+      <div class="cs-row"><span class="cs-label">מספר פריטים</span><span class="cs-val">${items.reduce((s,[,q])=>s+q,0)}</span></div>
+      <div class="cs-row cs-total"><span class="cs-label">סה״כ משוער</span><span class="cs-val">₪${total.toLocaleString()}</span></div>
+    </div>
+    <button class="order-btn" onclick="showSection('order')">← המשך להזמנה</button>
+    <p style="text-align:center;color:var(--muted);font-size:0.78rem;margin-top:0.8rem">* המחיר הסופי יאושר מולכם לאחר שנחזור אליכם</p>
+  `;
+}
+
+function changeQty(id, delta) {
+  const p = PRODUCTS.find(x=>x.id==id);
+  const newQty = (cart[id]||0) + delta;
+  if (newQty <= 0) { delete cart[id]; }
+  else { cart[id] = Math.min(newQty, p.stock); }
+  updateCartBadge();
+  renderCart();
+}
+
+// ═══════════════════════════════
+// TABS
+// ═══════════════════════════════
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('section-'+name).classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+
+  if (name === 'cart') renderCart();
+  if (name === 'order') { goStep(0); }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ═══════════════════════════════
+// WIZARD
+// ═══════════════════════════════
+let currentStep = 0;
+
+function goStep(step) {
+  // Validate
+  if (step === 1) {
+    const date = document.getElementById('f-date').value;
+    const address = document.getElementById('f-address').value.trim();
+    if (!date) { showToast('⚠️ נא לבחור תאריך אירוע', 'warn'); return; }
+    if (!address) { showToast('⚠️ נא להזין כתובת', 'warn'); return; }
+  }
+  if (step === 2) {
+    const name = document.getElementById('f-name').value.trim();
+    const phone = document.getElementById('f-phone').value.trim();
+    if (!name) { showToast('⚠️ נא להזין שם', 'warn'); return; }
+    if (!phone) { showToast('⚠️ נא להזין טלפון', 'warn'); return; }
+    buildReview();
+  }
+
+  document.querySelectorAll('.wizard-page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('wp-'+step).classList.add('active');
+
+  for (let i=0; i<=2; i++) {
+    const ws = document.getElementById('ws-'+i);
+    ws.classList.remove('active','done');
+    if (i < step) ws.classList.add('done');
+    if (i === step) ws.classList.add('active');
+    if (i < step) ws.querySelector('.ws-dot').textContent = '✓';
+    else ws.querySelector('.ws-dot').textContent = i+1;
+  }
+  currentStep = step;
+}
+
+function buildReview() {
+  const date = document.getElementById('f-date').value;
+  const time = document.getElementById('f-time').value;
+  const address = document.getElementById('f-address').value;
+  const eventType = document.getElementById('f-event-type').value;
+  const colors = document.getElementById('f-colors').value;
+  const name = document.getElementById('f-name').value;
+  const phone = document.getElementById('f-phone').value;
+  const email = document.getElementById('f-email').value;
+  const delivery = document.querySelector('input[name="delivery"]:checked')?.value;
+  const notes = document.getElementById('f-notes').value;
+  const designNotes = document.getElementById('f-design-notes').value;
+
+  const items = Object.entries(cart).filter(([,q])=>q>0);
+  const total = items.reduce((s,[id,qty])=>{ const p=PRODUCTS.find(x=>x.id==id); return s+p.price*qty; }, 0);
+
+  const rows = [
+    ['👤 שם', name],
+    ['📱 טלפון', phone],
+    email ? ['📧 מייל', email] : null,
+    ['📅 תאריך', `${date} בשעה ${time}`],
+    ['📍 כתובת', address],
+    eventType ? ['🎉 סוג אירוע', eventType] : null,
+    ['🚚 אספקה', delivery === 'delivery' ? 'התקנה באירוע' : 'איסוף עצמי'],
+    colors ? ['🎨 צבעים', colors] : null,
+    ['🛍 פריטים', items.map(([id,qty])=>{const p=PRODUCTS.find(x=>x.id==id);return `${p.icon} ${p.name} x${qty}`;}).join(', ')],
+    ['💰 סה״כ משוער', `₪${total.toLocaleString()}`],
+    notes ? ['💬 הערות', notes] : null,
+    designNotes ? ['✏️ עיצוב', designNotes] : null,
+  ].filter(Boolean);
+
+  document.getElementById('review-content').innerHTML = rows.map(([k,v]) =>
+    `<div class="review-item"><span class="ri-name">${k}</span><span class="ri-val" style="text-align:left;max-width:55%">${v}</span></div>`
+  ).join('');
+
+  // Build WhatsApp message (kept for internal use only)
+  const phone_wa = '972549254440';
+
+  // Prepare EmailJS params
+  emailParams = {
+    customer_name:  name,
+    customer_phone: phone,
+    customer_email: email || 'לא הוזן',
+    event_date:     date,
+    event_time:     time,
+    event_address:  address,
+    event_type:     eventType || 'לא צוין',
+    delivery_type:  delivery === 'delivery' ? 'התקנה באירוע' : 'איסוף עצמי',
+    colors:         colors || 'לא צוין',
+    order_items:    items.map(([id,qty])=>{ const p=PRODUCTS.find(x=>x.id==id); return `${p.name} x${qty}`; }).join(', '),
+    order_total:    `₪${total.toLocaleString()}`,
+    notes:          notes || 'אין',
+    design_notes:   designNotes || 'אין',
+  };
+
+  // Reset button state
+  const btn = document.getElementById('btn-confirm');
+  const icon = document.getElementById('email-btn-icon');
+  const txt = document.getElementById('email-btn-text');
+  btn.disabled = false;
+  btn.style.opacity = '1';
+  icon.textContent = '🎈';
+  txt.textContent = ' שריין הזמנה';
+  document.getElementById('email-success').style.display = 'none';
+}
+
+// ═══════════════════════════════
+// TOAST
+// ═══════════════════════════════
+function showToast(msg, type='success') {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  if (type === 'warn') t.style.background = '#FFD166'; 
+  if (type === 'warn') t.style.color = '#333';
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), 2100);
+}
+
+// ═══════════════════════════════
+// INIT
+// ═══════════════════════════════
+initBg();
+renderCatalog();
+
+// Set min date to today
+const today = new Date().toISOString().split('T')[0];
+document.getElementById('f-date').min = today;
+
+// Init EmailJS
+emailjs.init('YsEw0KxdTXI3cNFBt');
+
+// ═══════════════════════════════
+// EMAILJS SEND
+// ═══════════════════════════════
+let emailParams = {};
+
+function sendEmail() {
+  const btn = document.getElementById('btn-confirm');
+  const icon = document.getElementById('email-btn-icon');
+  const txt = document.getElementById('email-btn-text');
+
+  btn.disabled = true;
+  icon.textContent = '⏳';
+  txt.textContent = ' שולח...';
+
+  emailjs.send('service_xnvma8k', 'template_w0rta69', emailParams)
+    .then(() => {
+      icon.textContent = '✅';
+      txt.textContent = ' ההזמנה שוריינה!';
+      btn.style.opacity = '0.7';
+      document.getElementById('email-success').style.display = 'block';
+      showToast('🎉 ההזמנה שוריינה בהצלחה!');
+    })
+    .catch((err) => {
+      console.error('EmailJS error:', err);
+      icon.textContent = '❌';
+      txt.textContent = ' שגיאה — נסי שוב';
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      showToast('❌ שגיאה בשליחה, נסי שוב', 'warn');
+    });
+}
+</script>
+
+</body>
+</html>
