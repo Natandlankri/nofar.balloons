@@ -195,7 +195,7 @@ font-size: 0.72rem; font-weight: 600;
 .price sub { font-size: 0.75rem; font-weight: 400; color: var(–muted); margin-right: 2px; }
 
 .add-btn {
-background: var(–grad);
+background: linear-gradient(135deg, #FF6BB5, #C77DFF, #4CC9F0);
 border: none;
 width: 40px; height: 40px;
 border-radius: 50%;
@@ -205,9 +205,11 @@ cursor: pointer;
 transition: transform 0.2s, opacity 0.2s;
 display: flex; align-items:center; justify-content:center;
 flex-shrink: 0;
+-webkit-appearance: none;
+appearance: none;
 }
-.add-btn:hover:not(:disabled) { transform: scale(1.15) rotate(90deg); }
-.add-btn:disabled { background: rgba(255,255,255,0.1); cursor:not-allowed; }
+.add-btn:hover:not(:disabled) { transform: scale(1.15) rotate(90deg); opacity: 0.9; }
+.add-btn:disabled { background: rgba(255,255,255,0.12) !important; cursor:not-allowed; color: rgba(255,255,255,0.3); }
 
 /* ── CART ── */
 .cart-empty {
@@ -267,7 +269,7 @@ margin-bottom: 1.2rem;
 
 .order-btn {
 width: 100%;
-background: var(–grad);
+background: linear-gradient(135deg, #FF6BB5, #C77DFF, #4CC9F0);
 border: none;
 padding: 1rem;
 border-radius: 14px;
@@ -278,6 +280,8 @@ font-weight: 700;
 cursor: pointer;
 transition: opacity 0.2s, transform 0.2s;
 letter-spacing: 0.3px;
+-webkit-appearance: none;
+appearance: none;
 }
 .order-btn:hover { opacity: 0.9; transform: translateY(-2px); }
 
@@ -333,22 +337,28 @@ margin-bottom: 1rem;
 .field label { display:block; font-size:0.82rem; color:var(–muted); margin-bottom:0.4rem; font-weight:500; }
 .field input, .field select, .field textarea {
 width: 100%;
-background: var(–card2);
-border: 1px solid var(–border);
+box-sizing: border-box;
+background: #252540;
+border: 1px solid rgba(255,255,255,0.1);
 border-radius: 10px;
 padding: 0.75rem 1rem;
-color: var(–text);
+color: #F0F0FF;
 font-family: ‘Rubik’, sans-serif;
 font-size: 0.93rem;
 transition: border-color 0.2s;
 outline: none;
 direction: rtl;
+-webkit-appearance: none;
+appearance: none;
 }
+.field input::placeholder { color: rgba(240,240,255,0.25); }
 .field input:focus, .field select:focus, .field textarea:focus {
 border-color: var(–purple);
+background: #2a2a4a;
 }
 .field textarea { resize: vertical; min-height: 80px; }
-.field select option { background: var(–card2); }
+.field select { background-image: none; cursor: pointer; }
+.field select option { background: #252540; color: #F0F0FF; }
 
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
 
