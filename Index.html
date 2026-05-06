@@ -505,6 +505,143 @@ animation: flyToBadge 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 .btn-added { animation: btnSuccess 0.35s ease; }
 
+/* ── BUILDER ── */
+.builder-layout {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 1.2rem;
+align-items: start;
+}
+@media (max-width: 650px) {
+.builder-layout { grid-template-columns: 1fr; }
+.builder-preview-wrap { order: -1; }
+}
+.builder-card {
+background: var(–card);
+border: 1px solid var(–border);
+border-radius: 18px;
+padding: 1.2rem;
+margin-bottom: 1rem;
+}
+.builder-card-title {
+font-size: 0.95rem;
+font-weight: 600;
+margin-bottom: 1rem;
+color: var(–text);
+}
+.color-grid {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 0.6rem;
+}
+.color-swatch {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 0.4rem;
+cursor: pointer;
+padding: 0.4rem;
+border-radius: 12px;
+border: 2px solid transparent;
+transition: all 0.2s;
+}
+.color-swatch:hover { background: rgba(255,255,255,0.05); }
+.color-swatch.selected { border-color: white; background: rgba(255,255,255,0.08); }
+.swatch-circle {
+width: 38px; height: 38px;
+border-radius: 50%;
+box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+transition: transform 0.2s;
+}
+.color-swatch:hover .swatch-circle { transform: scale(1.12); }
+.swatch-name { font-size: 0.65rem; color: var(–muted); text-align: center; line-height: 1.2; }
+.swatch-type { font-size: 0.6rem; color: var(–purple); font-weight: 600; }
+
+.selected-balloon-row {
+display: flex;
+align-items: center;
+gap: 0.7rem;
+padding: 0.5rem 0;
+border-bottom: 1px solid var(–border);
+}
+.selected-balloon-row:last-child { border: none; }
+.sb-dot {
+width: 22px; height: 22px;
+border-radius: 50%;
+flex-shrink: 0;
+box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+.sb-name { flex: 1; font-size: 0.85rem; }
+.sb-price { font-size: 0.75rem; color: var(–muted); }
+.sb-qty {
+display: flex; align-items: center; gap: 0.4rem;
+background: var(–card2);
+border-radius: 50px;
+padding: 0.2rem 0.4rem;
+}
+.sb-qty-btn {
+background: none; border: none;
+color: var(–text); cursor: pointer;
+width: 22px; height: 22px;
+border-radius: 50%;
+font-size: 0.9rem;
+display: flex; align-items:center; justify-content:center;
+transition: background 0.15s;
+}
+.sb-qty-btn:hover { background: rgba(255,255,255,0.1); }
+.sb-qty-num { font-size: 0.85rem; font-weight: 700; min-width: 18px; text-align: center; }
+
+.builder-total-row {
+display: flex;
+justify-content: space-between;
+font-size: 0.9rem;
+padding-top: 0.8rem;
+border-top: 1px solid var(–border);
+margin-top: 0.5rem;
+color: var(–muted);
+}
+
+.preview-canvas-wrap {
+flex: 1;
+position: relative;
+display: flex;
+align-items: center;
+justify-content: center;
+min-height: 280px;
+}
+#bouquet-canvas {
+max-width: 100%;
+height: auto;
+display: none;
+}
+.preview-empty {
+text-align: center;
+color: var(–muted);
+font-size: 0.88rem;
+position: absolute;
+}
+
+.shape-grid {
+display: grid;
+grid-template-columns: repeat(5, 1fr);
+gap: 0.5rem;
+}
+.shape-btn {
+display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+background: var(–card2);
+border: 2px solid transparent;
+border-radius: 12px;
+padding: 0.5rem 0.3rem;
+cursor: pointer;
+transition: all 0.2s;
+font-family: ‘Rubik’, sans-serif;
+}
+.shape-btn:hover { border-color: rgba(255,255,255,0.2); }
+.shape-btn.active { border-color: var(–purple); background: rgba(199,125,255,0.12); }
+.shape-icon { font-size: 1.5rem; }
+.shape-name { font-size: 0.62rem; color: var(–muted); text-align: center; line-height: 1.2; }
+.shape-price { font-size: 0.6rem; color: var(–purple); font-weight: 600; }
+
 /* ── FOOTER ── */
 footer {
 position: relative; z-index: 1;
@@ -552,6 +689,9 @@ border-top: 1px solid var(–border);
     <button class="nav-btn active" onclick="showSection('catalog')" id="tab-catalog">
       <span>🛍</span><span class="nav-label">קטלוג</span>
     </button>
+    <button class="nav-btn" onclick="showSection('builder')" id="tab-builder">
+      <span>🎨</span><span class="nav-label">בנה זר</span>
+    </button>
     <button class="nav-btn" onclick="showSection('cart')" id="tab-cart">
       <span>🛒</span><span class="nav-label">עגלה</span>
       <span class="nav-badge" id="cart-badge" style="display:none">0</span>
@@ -584,6 +724,72 @@ border-top: 1px solid var(–border);
 </div>
 
 <div class="grid" id="products-grid"></div>
+```
+
+  </div>
+
+  <!-- ═══ BUILDER ═══ -->
+
+  <div class="section" id="section-builder">
+    <div class="sec-head">
+      <h2 class="sec-title">בנה את הזר שלך <span>🎨</span></h2>
+      <p class="sec-sub">בחרו צבעים וכמויות — ותראו איך הזר ייראה בזמן אמת</p>
+    </div>
+
+```
+<div class="builder-layout">
+
+  <!-- LEFT: Controls -->
+  <div class="builder-controls">
+
+    <!-- Shape selector -->
+    <div class="builder-card">
+      <h3 class="builder-card-title">✨ סוג בלון</h3>
+      <div class="shape-grid" id="shape-grid"></div>
+    </div>
+
+    <!-- Color palette -->
+    <div class="builder-card">
+      <h3 class="builder-card-title">🎨 בחרו צבע והוסיפו</h3>
+      <div class="color-grid" id="color-grid"></div>
+    </div>
+
+    <!-- Selected balloons -->
+    <div class="builder-card" id="selected-card" style="display:none">
+      <h3 class="builder-card-title">🎈 הבלונים שבחרתם</h3>
+      <div id="selected-list"></div>
+      <div class="builder-total-row">
+        <span>סה״כ בלונים:</span>
+        <span id="total-count" style="font-weight:700">0</span>
+      </div>
+      <div class="builder-total-row" style="margin-top:0.3rem">
+        <span>מחיר משוער:</span>
+        <span id="total-price" style="font-weight:800;color:var(--gold)">₪0</span>
+      </div>
+    </div>
+
+    <!-- Add to cart -->
+    <button class="order-btn" id="builder-add-btn" onclick="addBuilderToCart()" style="display:none;margin-top:0.5rem">
+      🛒 הוסף זר מותאם לעגלה
+    </button>
+
+  </div>
+
+  <!-- RIGHT: Preview -->
+  <div class="builder-preview-wrap">
+    <div class="builder-card" style="height:100%;min-height:360px;display:flex;flex-direction:column">
+      <h3 class="builder-card-title">👁 תצוגה מקדימה</h3>
+      <div class="preview-canvas-wrap">
+        <canvas id="bouquet-canvas" width="320" height="320"></canvas>
+        <div id="preview-empty" class="preview-empty">
+          <div style="font-size:3rem;opacity:0.3">🎈</div>
+          <p>בחרו צבעים כדי לראות את הזר</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
 ```
 
   </div>
@@ -952,6 +1158,7 @@ function showSection(name) {
 
   if (name === 'cart') renderCart();
   if (name === 'order') { goStep(0); }
+  if (name === 'builder') { drawBouquet(); }
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -1079,8 +1286,327 @@ renderCatalog();
 const today = new Date().toISOString().split('T')[0];
 document.getElementById('f-date').min = today;
 
-// Init EmailJS
-emailjs.init('YsEw0KxdTXI3cNFBt');
+// ═══════════════════════════════
+// BUILDER
+// ═══════════════════════════════
+const BALLOON_SHAPES = [
+  { id: 'round',  name: 'עגול',   icon: '🔵', price: 8  },
+  { id: 'heart',  name: 'לב',     icon: '❤️', price: 10 },
+  { id: 'star',   name: 'כוכב',   icon: '⭐', price: 10 },
+  { id: 'jumbo',  name: 'ענק',    icon: '🟣', price: 15 },
+  { id: 'number', name: 'מספר',   icon: '🔢', price: 20 },
+];
+
+let activeShape = BALLOON_SHAPES[0];
+
+const BALLOON_COLORS = [
+  { name: 'לבן',        hex: '#F5F5F5', type: 'רגיל',  metallic: false },
+  { name: 'שחור',       hex: '#333333', type: 'רגיל',  metallic: false },
+  { name: 'ורוד',       hex: '#FF6BB5', type: 'רגיל',  metallic: false },
+  { name: 'אדום',       hex: '#E63946', type: 'רגיל',  metallic: false },
+  { name: 'כחול',       hex: '#4361EE', type: 'רגיל',  metallic: false },
+  { name: 'תכלת',       hex: '#4CC9F0', type: 'רגיל',  metallic: false },
+  { name: 'סגול',       hex: '#C77DFF', type: 'רגיל',  metallic: false },
+  { name: 'ירוק',       hex: '#06D6A0', type: 'רגיל',  metallic: false },
+  { name: 'צהוב',       hex: '#FFD166', type: 'רגיל',  metallic: false },
+  { name: 'כתום',       hex: '#FF8E53', type: 'רגיל',  metallic: false },
+  { name: 'זהב כרום',   hex: '#FFD700', type: 'כרום',  metallic: true  },
+  { name: 'כסף כרום',   hex: '#C0C0C0', type: 'כרום',  metallic: true  },
+  { name: 'ורוד כרום',  hex: '#FF9ECD', type: 'כרום',  metallic: true  },
+  { name: 'כחול כרום',  hex: '#6EC6FF', type: 'כרום',  metallic: true  },
+  { name: 'סגול מטאלי', hex: '#B57BFF', type: 'מטאלי', metallic: true  },
+  { name: 'ירוק מטאלי', hex: '#4DE680', type: 'מטאלי', metallic: true  },
+];
+
+// builderSelection: array of {color, shape, qty}
+let builderItems = []; // [{colorIdx, shapeId, qty}]
+
+function initBuilder() {
+  // Shapes
+  const sg = document.getElementById('shape-grid');
+  sg.innerHTML = BALLOON_SHAPES.map(s => `
+    <button class="shape-btn ${s.id === activeShape.id ? 'active' : ''}" onclick="selectShape('${s.id}')">
+      <span class="shape-icon">${s.icon}</span>
+      <span class="shape-name">${s.name}</span>
+      <span class="shape-price">₪${s.price}</span>
+    </button>
+  `).join('');
+
+  // Colors
+  const cg = document.getElementById('color-grid');
+  cg.innerHTML = BALLOON_COLORS.map((c, i) => `
+    <div class="color-swatch" id="swatch-${i}" onclick="addColorBalloon(${i})">
+      <div class="swatch-circle" style="${swatchStyle(c)}"></div>
+      <span class="swatch-name">${c.name}</span>
+      <span class="swatch-type">${c.type}</span>
+    </div>
+  `).join('');
+}
+
+function swatchStyle(c) {
+  if (c.metallic) return `background:linear-gradient(135deg,${c.hex},white,${c.hex})`;
+  return `background:${c.hex}`;
+}
+
+function selectShape(id) {
+  activeShape = BALLOON_SHAPES.find(s => s.id === id);
+  document.querySelectorAll('.shape-btn').forEach(b => b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+}
+
+function addColorBalloon(colorIdx) {
+  const key = `${colorIdx}_${activeShape.id}`;
+  const existing = builderItems.find(item => item.key === key);
+  if (existing) {
+    existing.qty++;
+  } else {
+    builderItems.push({ key, colorIdx, shapeId: activeShape.id, qty: 1 });
+  }
+  renderBuilderSelected();
+  drawBouquet();
+
+  // Quick flash on swatch
+  const sw = document.getElementById('swatch-'+colorIdx);
+  sw.classList.add('selected');
+  setTimeout(() => sw.classList.remove('selected'), 300);
+}
+
+function changeBuilderQty(key, delta) {
+  const item = builderItems.find(i => i.key === key);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) builderItems = builderItems.filter(i => i.key !== key);
+  renderBuilderSelected();
+  drawBouquet();
+}
+
+function renderBuilderSelected() {
+  const card = document.getElementById('selected-card');
+  const addBtn = document.getElementById('builder-add-btn');
+  const list = document.getElementById('selected-list');
+
+  if (builderItems.length === 0) {
+    card.style.display = 'none';
+    addBtn.style.display = 'none';
+    return;
+  }
+  card.style.display = 'block';
+  addBtn.style.display = 'block';
+
+  let totalCount = 0, totalPrice = 0;
+  list.innerHTML = builderItems.map(item => {
+    const c = BALLOON_COLORS[item.colorIdx];
+    const s = BALLOON_SHAPES.find(s => s.id === item.shapeId);
+    const unitPrice = s.price + (c.metallic ? 2 : 0);
+    totalCount += item.qty;
+    totalPrice += item.qty * unitPrice;
+    return `
+    <div class="selected-balloon-row">
+      <div class="sb-dot" style="${swatchStyle(c)}"></div>
+      <div>
+        <div class="sb-name">${s.icon} ${c.name} — ${s.name}</div>
+        <div class="sb-price">₪${unitPrice} ליחידה</div>
+      </div>
+      <div class="sb-qty">
+        <button class="sb-qty-btn" onclick="changeBuilderQty('${item.key}',-1)">−</button>
+        <span class="sb-qty-num">${item.qty}</span>
+        <button class="sb-qty-btn" onclick="changeBuilderQty('${item.key}',1)">+</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('total-count').textContent = totalCount;
+  document.getElementById('total-price').textContent = `₪${totalPrice}`;
+}
+
+function drawBouquet() {
+  const canvas = document.getElementById('bouquet-canvas');
+  const empty  = document.getElementById('preview-empty');
+
+  if (builderItems.length === 0) {
+    canvas.style.display = 'none';
+    empty.style.display = 'flex';
+    return;
+  }
+  canvas.style.display = 'block';
+  empty.style.display = 'none';
+
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  // Flatten to individual balloons
+  const balloons = [];
+  builderItems.forEach(item => {
+    const c = BALLOON_COLORS[item.colorIdx];
+    const s = BALLOON_SHAPES.find(s => s.id === item.shapeId);
+    for (let q = 0; q < item.qty; q++) balloons.push({ color: c, shape: s });
+  });
+
+  const cx = W / 2, baseY = H - 30;
+  const R = 26;
+
+  // Stem
+  ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(cx, baseY);
+  ctx.lineTo(cx, baseY - 55);
+  ctx.stroke();
+
+  const positions = getBouquetPositions(balloons.length, cx, baseY - 55, R);
+
+  // Strings
+  positions.forEach(pos => {
+    ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(cx, baseY - 55);
+    ctx.quadraticCurveTo((cx+pos.x)/2 + (Math.random()-0.5)*15, baseY-75, pos.x, pos.y + R);
+    ctx.stroke();
+  });
+
+  // Balloons
+  positions.forEach((pos, i) => {
+    const b = balloons[i];
+    if (b.shape.id === 'heart')  drawHeart(ctx, pos.x, pos.y, R, b.color);
+    else if (b.shape.id === 'star')   drawStar(ctx, pos.x, pos.y, R, b.color);
+    else if (b.shape.id === 'jumbo')  drawBalloon(ctx, pos.x, pos.y, R * 1.5, b.color);
+    else if (b.shape.id === 'number') drawNumber(ctx, pos.x, pos.y, R, b.color);
+    else drawBalloon(ctx, pos.x, pos.y, R, b.color);
+  });
+}
+
+function getBouquetPositions(count, cx, baseY, R) {
+  const positions = [];
+  const gap = R * 2.2;
+  let remaining = count;
+  let row = 0;
+  const rows = [];
+  while (remaining > 0) {
+    const inRow = Math.min(remaining, Math.min(3 + row, 5));
+    rows.unshift(inRow);
+    remaining -= inRow;
+    row++;
+  }
+  rows.forEach((inRow, ri) => {
+    const startX = cx - ((inRow-1) * gap) / 2;
+    for (let i = 0; i < inRow; i++) {
+      positions.push({ x: startX + i * gap, y: baseY - ri * (gap * 0.88) });
+    }
+  });
+  return positions;
+}
+
+function drawBalloon(ctx, x, y, r, c) {
+  const g = ctx.createRadialGradient(x-r*0.3, y-r*0.3, r*0.05, x, y, r);
+  if (c.metallic) {
+    g.addColorStop(0, '#fff'); g.addColorStop(0.3, c.hex); g.addColorStop(1, shadeColor(c.hex,-40));
+  } else {
+    g.addColorStop(0, lightenColor(c.hex,60)); g.addColorStop(0.4, c.hex); g.addColorStop(1, shadeColor(c.hex,-50));
+  }
+  ctx.beginPath();
+  ctx.ellipse(x, y, r, r*1.15, 0, 0, Math.PI*2);
+  ctx.fillStyle = g; ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(x-r*0.28, y-r*0.3, r*0.2, r*0.11, -0.5, 0, Math.PI*2);
+  ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.fill();
+  ctx.beginPath();
+  ctx.arc(x, y+r*1.15, 3, 0, Math.PI*2);
+  ctx.fillStyle = shadeColor(c.hex,-60); ctx.fill();
+}
+
+function drawHeart(ctx, x, y, r, c) {
+  const s = r * 0.9;
+  ctx.save();
+  ctx.translate(x, y);
+  const g = ctx.createRadialGradient(-s*0.2, -s*0.2, s*0.05, 0, 0, s*1.2);
+  if (c.metallic) {
+    g.addColorStop(0,'#fff'); g.addColorStop(0.4,c.hex); g.addColorStop(1,shadeColor(c.hex,-40));
+  } else {
+    g.addColorStop(0,lightenColor(c.hex,60)); g.addColorStop(0.5,c.hex); g.addColorStop(1,shadeColor(c.hex,-50));
+  }
+  ctx.beginPath();
+  ctx.moveTo(0, s*0.3);
+  ctx.bezierCurveTo(-s*1.1,-s*0.5, -s*1.3, s*0.6, 0, s*1.2);
+  ctx.bezierCurveTo(s*1.3, s*0.6, s*1.1,-s*0.5, 0, s*0.3);
+  ctx.fillStyle = g; ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(-s*0.35, -s*0.1, s*0.2, s*0.12, -0.6, 0, Math.PI*2);
+  ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.fill();
+  ctx.restore();
+}
+
+function drawStar(ctx, x, y, r, c) {
+  const spikes = 5, outer = r, inner = r * 0.45;
+  const g = ctx.createRadialGradient(x-r*0.2,y-r*0.2,r*0.05,x,y,r);
+  if (c.metallic) {
+    g.addColorStop(0,'#fff'); g.addColorStop(0.4,c.hex); g.addColorStop(1,shadeColor(c.hex,-40));
+  } else {
+    g.addColorStop(0,lightenColor(c.hex,60)); g.addColorStop(0.5,c.hex); g.addColorStop(1,shadeColor(c.hex,-50));
+  }
+  ctx.beginPath();
+  for (let i = 0; i < spikes*2; i++) {
+    const rad = (i * Math.PI) / spikes - Math.PI/2;
+    const len = i%2===0 ? outer : inner;
+    i===0 ? ctx.moveTo(x+Math.cos(rad)*len, y+Math.sin(rad)*len)
+           : ctx.lineTo(x+Math.cos(rad)*len, y+Math.sin(rad)*len);
+  }
+  ctx.closePath();
+  ctx.fillStyle = g; ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(x-r*0.2, y-r*0.2, r*0.15, r*0.08, -0.5, 0, Math.PI*2);
+  ctx.fillStyle='rgba(255,255,255,0.4)'; ctx.fill();
+}
+
+function drawNumber(ctx, x, y, r, c) {
+  // Foil number balloon — draw as rounded rect with number symbol
+  const w = r*1.3, h = r*1.6;
+  const g = ctx.createLinearGradient(x-w,y-h,x+w,y+h);
+  if (c.metallic) {
+    g.addColorStop(0,'#fff'); g.addColorStop(0.4,c.hex); g.addColorStop(1,shadeColor(c.hex,-40));
+  } else {
+    g.addColorStop(0,lightenColor(c.hex,60)); g.addColorStop(0.6,c.hex); g.addColorStop(1,shadeColor(c.hex,-50));
+  }
+  ctx.beginPath();
+  ctx.roundRect(x-w/2, y-h/2, w, h, 8);
+  ctx.fillStyle = g; ctx.fill();
+  ctx.fillStyle='rgba(255,255,255,0.6)';
+  ctx.font = `bold ${r*0.7}px Rubik,sans-serif`;
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('#', x, y);
+}
+
+function addBuilderToCart() {
+  if (builderItems.length === 0) return;
+  const totalCount = builderItems.reduce((s,i)=>s+i.qty,0);
+  const totalPrice = builderItems.reduce((s,item)=>{
+    const c=BALLOON_COLORS[item.colorIdx];
+    const sh=BALLOON_SHAPES.find(s=>s.id===item.shapeId);
+    return s + item.qty*(sh.price+(c.metallic?2:0));
+  },0);
+  const desc = builderItems.map(item=>{
+    const c=BALLOON_COLORS[item.colorIdx];
+    const sh=BALLOON_SHAPES.find(s=>s.id===item.shapeId);
+    return `${sh.icon}${c.name} ×${item.qty}`;
+  }).join(', ');
+
+  const customId = 'custom_'+Date.now();
+  PRODUCTS.push({ id:customId, name:`זר מותאם (${totalCount} בלונים)`, cat:'custom', icon:'🎈', desc, price:totalPrice, stock:99, max:99, colors:[], isCustom:true });
+  cart[customId] = 1;
+  updateCartBadge();
+  showToast('🎈 הזר המותאם נוסף לעגלה!');
+  builderItems = [];
+  renderBuilderSelected();
+  drawBouquet();
+  setTimeout(()=>showSection('cart'), 800);
+}
+
+function lightenColor(hex,amt){const n=parseInt(hex.replace('#',''),16);return `rgb(${Math.min(255,(n>>16)+amt)},${Math.min(255,((n>>8)&0xFF)+amt)},${Math.min(255,(n&0xFF)+amt)})`;}
+function shadeColor(hex,amt){const n=parseInt(hex.replace('#',''),16);return `rgb(${Math.max(0,Math.min(255,(n>>16)+amt))},${Math.max(0,Math.min(255,((n>>8)&0xFF)+amt))},${Math.max(0,Math.min(255,(n&0xFF)+amt))})`;}
+
+// Init builder
+initBuilder();
 
 // ═══════════════════════════════
 // EMAILJS SEND
