@@ -1617,10 +1617,10 @@ function sendEmail() {
     .catch((err) => {
       console.error('EmailJS error:', err);
       icon.textContent = '❌';
-      txt.textContent = ' שגיאה — נסי שוב';
+      txt.textContent = ' שגיאה — נסה שוב';
       btn.disabled = false;
       btn.style.opacity = '1';
-      showToast('❌ שגיאה בשליחה, נסי שוב', 'warn');
+      showToast('❌ שגיאה בשליחה, נסה שוב', 'warn');
     });
 }
 </script>
